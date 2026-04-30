@@ -1,4 +1,6 @@
 import { Readable } from "node:stream";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 
 async function readBody(req) {
   const chunks = [];
@@ -20,7 +22,38 @@ function toHeaders(nodeHeaders) {
   return headers;
 }
 
+function getContentType(filePath) {
+  if (filePath.endsWith(".css")) return "text/css; charset=utf-8";
+  if (filePath.endsWith(".js")) return "application/javascript; charset=utf-8";
+  if (filePath.endsWith(".json")) return "application/json; charset=utf-8";
+  if (filePath.endsWith(".svg")) return "image/svg+xml";
+  if (filePath.endsWith(".png")) return "image/png";
+  if (filePath.endsWith(".jpg") || filePath.endsWith(".jpeg")) return "image/jpeg";
+  if (filePath.endsWith(".webp")) return "image/webp";
+  if (filePath.endsWith(".ico")) return "image/x-icon";
+  if (filePath.endsWith(".txt")) return "text/plain; charset=utf-8";
+  return "application/octet-stream";
+}
+
 export default async function handler(req, res) {
+  const requestedPath = req.url?.split("?")[0] ?? "/";
+  if (requestedPath.startsWith("/assets/") || requestedPath === "/.assetsignore") {
+    const safePath = requestedPath.replace(/^\/+/, "");
+    const filePath = path.join(process.cwd(), "dist", "client", safePath);
+    try {
+      const file = await readFile(filePath);
+      res.statusCode = 200;
+      res.setHeader("content-type", getContentType(filePath));
+      res.setHeader("cache-control", "public, max-age=31536000, immutable");
+      res.end(file);
+      return;
+    } catch {
+      res.statusCode = 404;
+      res.end("Not Found");
+      return;
+    }
+  }
+
   const { default: app } = await import("../dist/server/server.js");
 
   const proto = req.headers["x-forwarded-proto"] ?? "https";
