@@ -1,17 +1,12 @@
 {
   "version": 2,
-  "buildCommand": "npm run build",
+  "buildCommand": "npm run build && mkdir -p public && cp -r dist/client/assets public/assets && cp dist/client/.assetsignore public/.assetsignore",
   "routes": [
     {
-      "src": "^/assets/(.*)$",
-      "dest": "/dist/client/assets/$1"
+      "handle": "filesystem"
     },
     {
-      "src": "^/\\.assetsignore$",
-      "dest": "/dist/client/.assetsignore"
-    },
-    {
-      "src": "^/(.*)$",
+      "src": "/(.*)",
       "dest": "/api/index.js"
     }
   ]
