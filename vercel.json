@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "routes": [
+    {
+      "src": "^/assets/(.*)$",
+      "dest": "/dist/client/assets/$1"
+    },
+    {
+      "src": "^/\\.assetsignore$",
+      "dest": "/dist/client/.assetsignore"
+    },
+    {
+      "src": "^/(.*)$",
+      "dest": "/api/index.js"
+    }
+  ]
+}
