@@ -3,11 +3,7 @@
   "buildCommand": "npm run build",
   "functions": {
     "api/index.js": {
-      "includeFiles": [
-        "dist/server/**",
-        "dist/client/assets/**",
-        "dist/client/.assetsignore"
-      ]
+      "includeFiles": "dist/**"
     }
   },
   "routes": [
