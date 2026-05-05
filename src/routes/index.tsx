@@ -32,9 +32,9 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const featured = CALCULATORS.filter((c) => c.implemented).slice(0, 8);
+  const featured = CALCULATORS.filter((c) => c.implemented !== false).slice(0, 8);
   const totalCount = CALCULATORS.length;
-  const liveCount = CALCULATORS.filter((c) => c.implemented).length;
+  const liveCount = CALCULATORS.filter((c) => c.implemented !== false).length;
   const conversionTools = calculatorsByCategory("conversion").slice(0, 6);
   const financeTools = calculatorsByCategory("finance").slice(0, 6);
 

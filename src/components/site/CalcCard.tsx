@@ -15,7 +15,7 @@ export function CalcCard({ calc }: { calc: Calculator }) {
         <div className="min-w-0">
           <div className="flex items-center gap-2">
             <h3 className="font-display text-base font-semibold">{calc.name}</h3>
-            {!calc.implemented && (
+            {calc.implemented === false && (
               <span className="rounded-full bg-muted px-1.5 py-0.5 text-[9px] font-medium uppercase tracking-wider text-muted-foreground">
                 soon
               </span>

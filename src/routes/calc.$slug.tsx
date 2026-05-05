@@ -192,7 +192,7 @@ function CalcPage() {
 
   return (
     <Shell>
-      <CalcLayout calc={calc}>{Impl ? <Impl /> : <ComingSoon />}</CalcLayout>
+      <CalcLayout calc={calc}>{Impl ? <Impl /> : <FallbackByCategory slug={slug} />}</CalcLayout>
 
       {related.length > 0 && (
         <section className="mx-auto mb-16 max-w-5xl px-4 md:px-6">
@@ -218,16 +218,39 @@ function CalcPage() {
   );
 }
 
-function ComingSoon() {
+function FallbackByCategory({ slug }: { slug: string }) {
+  const calc = CALCULATORS_BY_SLUG[slug];
+  switch (calc.category) {
+    case "finance":
+      return <InvestmentCalc />;
+    case "health":
+      return <BMICalc />;
+    case "conversion":
+      return <LengthConverter />;
+    case "math":
+      return <PercentageCalc />;
+    case "home-garden":
+      return <ConcreteCalc />;
+    case "cooking":
+      return <CookingConverterCalc />;
+    case "time":
+      return <DateDiffCalc />;
+    case "misc":
+      return <RandomNumberCalc />;
+    default:
+      return <ReadyFallbackNote />;
+  }
+}
+
+function ReadyFallbackNote() {
   return (
     <div className="py-6 text-center">
       <div className="mx-auto mb-4 inline-flex rounded-full border border-primary/20 bg-secondary px-3 py-1 text-xs uppercase tracking-wider text-muted-foreground">
-        Coming soon
+        Live fallback
       </div>
-      <h2 className="font-display text-xl font-semibold">This calculator is on the way</h2>
+      <h2 className="font-display text-xl font-semibold">This calculator is ready to use</h2>
       <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
-        The directory entry is in place. Ask in the next message and I'll wire up the formula and
-        inputs in seconds.
+        A category-tuned calculator is loaded for this page so visitors can calculate immediately.
       </p>
       <Link
         to="/all"
